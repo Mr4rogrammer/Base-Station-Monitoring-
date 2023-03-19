@@ -15,15 +15,25 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.mrprogrammer.mrtower.Interface.CompleteHandler;
 import com.mrprogrammer.mrtower.R;
 import com.mrprogrammer.mrtower.Realm.SaveLocation;
+import com.mrprogrammer.mrtower.Realm.Tower;
 import com.mrprogrammer.mrtower.Retrofit.ApiCall;
+import com.mrprogrammer.mrtower.Utils.RealmManager;
 import com.mrprogrammer.shop.MrToast.MrToast;
 
-public class DashboardFragment extends Fragment {
+import java.util.List;
+
+import io.realm.Realm;
+
+public class DashboardFragment extends Fragment implements OnMapReadyCallback{
     private static View view;
+
     SupportMapFragment supportMapFragment;
+    private GoogleMap googleMapView = null;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -38,39 +48,34 @@ public class DashboardFragment extends Fragment {
         } catch (InflateException e) {
             /* map is already there, just return view as it is */
         }
-        Button m = view.findViewById(R.id.test);
-
-        m.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ApiCall.Companion.getValue(10.4807146, 78.7701246, new CompleteHandler() {
-                    @Override
-                    public void onSuccess(String Message) {
-                        System.out.println(Message);
-                        SaveLocation.Companion.saveLocationData(Message);
-                    }
-
-                    @Override
-                    public void onFailure(String e) {
-                        MrToast.Companion.error(getActivity(),e);
-                    }
-                });
-            }
-        });
-
         try {
-            supportMapFragment=(SupportMapFragment) requireActivity().getSupportFragmentManager().findFragmentById(R.id.mapView);
-
-            supportMapFragment.getMapAsync(new OnMapReadyCallback() {
-                @Override
-                public void onMapReady(@NonNull GoogleMap googleMap) {
-
-                }
-            });
+            supportMapFragment=(SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.mapView);
+            assert supportMapFragment != null;
+            supportMapFragment.getMapAsync(this);
         } catch (Exception e) {
             e.printStackTrace();
         }
         return view;
     }
 
+
+    private void addLocations(){
+        Realm realm = RealmManager.getInstance();
+
+       List<Tower> data =  realm.where(Tower.class).findAll();
+
+        for(int i= 0 ;i< data.size();i++){
+            LatLng location = new LatLng(data.get(i).getLat(), data.get(i).getLon());
+            MarkerOptions markerOptions = new MarkerOptions()
+                    .position(location)
+                    .title(data.get(i).getRadio());
+            googleMapView.addMarker(markerOptions);
+        }
+    }
+
+    @Override
+    public void onMapReady(@NonNull GoogleMap googleMap) {
+        googleMapView = googleMap;
+        addLocations();
+    }
 }
