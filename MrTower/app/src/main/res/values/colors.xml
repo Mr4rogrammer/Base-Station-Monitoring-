@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <color name="trans">#00000000</color>
+    <color name="green">#0FA37F</color>
+    <color name="red">#FF0000</color>
+
+    //0FA37F
+    //224139
+    //413D22
+    //343561
+
+    //Mr.Toast
+    <color name="success">#95FDAC</color>
+    <color name="success_left">#3EAA56</color>
+    <color name="warning">#FBD199</color>
+    <color name="warning_left">#FFA62E</color>
+    <color name="information">#97BFF8</color>
+    <color name="information_left">#1677FF</color>
+    <color name="error">#F8B4AE</color>
+    <color name="error_left">#F54334</color>
+    <color name="message">#F8E7BD</color>
+    <color name="message_left">#4C4A45</color>
+    <color name="blue">#2196F3</color>
+</resources>

@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "608045916019",
+    "project_id": "mrtower-f2360",
+    "storage_bucket": "mrtower-f2360.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:608045916019:android:cd8b782fa3fdc957f96f06",
+        "android_client_info": {
+          "package_name": "com.mrprogrammer.mrtower"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "608045916019-1rfpham48q7erptb4337rctm6l04kpco.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mrprogrammer.mrtower",
+            "certificate_hash": "a1191464e487405006e2fc3253406bab9c09424f"
+          }
+        },
+        {
+          "client_id": "608045916019-6c20mt61fdm2gr86dnjr4sri20u03oj4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDvE3vZxumx0ywwAittiSrzdcYon-5laus"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "608045916019-6c20mt61fdm2gr86dnjr4sri20u03oj4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

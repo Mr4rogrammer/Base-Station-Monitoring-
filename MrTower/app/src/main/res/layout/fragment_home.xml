@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:context=".Activity.ui.home.HomeFragment">
+
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <com.github.anastr.speedviewlib.SpeedView
+            android:id="@+id/uploadSpeed"
+            android:layout_width="0dp"
+            app:sv_unit=" Mb/s"
+            app:sv_indicator="NeedleIndicator"
+            app:sv_speedTextPadding="1dp"
+            app:sv_centerCircleRadius="15dp"
+            android:tooltipText="Upload Speed"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            app:sv_trembleDegree="0"
+            android:layout_weight="1" />
+
+        <com.github.anastr.speedviewlib.SpeedView
+            android:id="@+id/downloadSpeed"
+            android:layout_width="0dp"
+            app:sv_centerCircleRadius="15dp"
+            app:sv_speedTextPadding="1dp"
+            app:sv_indicator="NeedleIndicator"
+            app:sv_unit=" Mb/s"
+            app:sv_trembleDegree="0"
+            android:tooltipText="Download Speed"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+    <ListView
+        android:padding="5dp"
+        android:id="@+id/listOfNetworkData"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>

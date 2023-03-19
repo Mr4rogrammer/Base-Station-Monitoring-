@@ -16,19 +16,21 @@ def getDataFromLocation(pos_offset,neg_offset):
     conn = connectToDb()
     cur = conn.cursor()
     # Execute a SQL query
-    sampleQuery = "SELECT * FROM Tower WHERE id > 1 AND id < 10;"
+    sampleQuery = "SELECT * FROM Tower WHERE id > 1 AND id < 40;"
     query ="SELECT * FROM Tower WHERE lat > "+str(neg_offset[0])+" AND lat < "+str(pos_offset[0])+" AND lon > "+str(neg_offset[1])+" AND lon < "+str(pos_offset[1])+";"
     print(query)
-    cur.execute(query)
+    cur.execute(sampleQuery)
 
     # Fetch the query results
     rows = cur.fetchall()
-    jsonlist=[]
+    jsonlist="["
     for row in rows:
         t = tuple(float(x) if isinstance(x, Decimal) else x for x in row)
-        jsonlist.append([{'id':t[0]},{'radio':t[1]},{'mcc':t[2]}
-                        ,{'net':t[3]},{'area':t[4]},{'cell':t[5]},{'lon':t[6]},{'lat':t[7]}])
+        jsonlist = jsonlist + '{"id" :'+str(t[0])+',"radio": "'+str(t[1])+'","mcc" :'+str(t[2])+',"net":'+str(t[3])+',"area":'+str(t[4])+',"cell":'+str(t[5])+',"lon":'+str(t[6])+',"lat":'+str(t[7])+"},"
+
+        print(jsonlist)
+    jsonlist = jsonlist[:-1] +  "]"
     # Close the cursor and connection
     cur.close()
     conn.close()
-    return(json.dumps(jsonlist))
+    return jsonlist

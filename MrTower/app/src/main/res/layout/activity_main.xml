@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".Activity.MainActivity">
+
+
+
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/appTourPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/radioBtn"
+        android:layout_marginBottom="20dp" />
+
+
+    <RadioGroup
+        android:layout_centerHorizontal="true"
+        android:id="@+id/radioBtn"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/login"
+        android:layout_gravity="center_vertical"
+        android:layout_marginBottom="15dp"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/first"
+            android:layout_width="0dp"
+            android:layout_height="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/radio_flat_selector"
+            android:button="@android:color/transparent" />
+
+        <RadioButton
+            android:id="@+id/second"
+            android:layout_width="0dp"
+            android:layout_height="5dp"
+            android:layout_marginStart="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/radio_flat_selector"
+            android:button="@android:color/transparent" />
+
+        <RadioButton
+            android:id="@+id/third"
+            android:layout_width="0dp"
+            android:layout_height="5dp"
+            android:layout_marginStart="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/radio_flat_selector"
+            android:button="@android:color/transparent" />
+
+        <RadioButton
+            android:id="@+id/four"
+            android:layout_width="0dp"
+            android:layout_height="5dp"
+            android:layout_marginStart="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/radio_flat_selector"
+            android:button="@android:color/transparent" />
+
+    </RadioGroup>
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/login"
+        android:layout_above="@id/terms"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="10dp"
+        android:backgroundTint="@color/red"
+        app:cardCornerRadius="20dp">
+
+        <ImageView
+            android:id="@+id/googleLogo"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="10dp" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/red"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:text="Login with Google"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textStyle="bold" />
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:padding="7dp"
+        android:id="@+id/terms"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="5dp"
+        android:text="By continuing, I agree to the terms &amp; conditions and privacy policy"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="12sp" />
+
+    <ProgressBar
+        android:visibility="gone"
+        android:indeterminateTint="@color/red"
+        android:id="@+id/progress_circular"
+        android:layout_centerInParent="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+</RelativeLayout>
