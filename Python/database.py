@@ -19,7 +19,7 @@ def getDataFromLocation(pos_offset,neg_offset):
     sampleQuery = "SELECT * FROM Tower WHERE id > 1 AND id < 40;"
     query ="SELECT * FROM Tower WHERE lat > "+str(neg_offset[0])+" AND lat < "+str(pos_offset[0])+" AND lon > "+str(neg_offset[1])+" AND lon < "+str(pos_offset[1])+";"
     print(query)
-    cur.execute(sampleQuery)
+    cur.execute(query)
 
     # Fetch the query results
     rows = cur.fetchall()

@@ -2,15 +2,29 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="15dp"
+
     android:background="@color/trans">
 
 
-
-    <TextView
-        android:layout_marginTop="7dp"
-        android:textColor="@color/black"
-        android:textAlignment="center"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:src="@drawable/two" />
+
+        <TextView
+            android:text="A signal app can help you find the strongest connection,\n but a tower gives you \nthe connection in the first place"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:textAlignment="center"
+            android:textColor="@color/black" />
+    </LinearLayout>
 
 </RelativeLayout>

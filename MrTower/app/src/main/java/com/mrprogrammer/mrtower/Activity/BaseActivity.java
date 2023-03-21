@@ -16,6 +16,7 @@ import com.mrprogrammer.mrtower.databinding.ActivityBaseBinding;
 public class BaseActivity extends AppCompatActivity {
     private ActivityBaseBinding binding;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -22,11 +22,10 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.messaging.FirebaseMessaging
 import com.mrprogrammer.mrtower.Adapter.AppTourViewPageAdapter
 import com.mrprogrammer.mrtower.R
-import com.mrprogrammer.mrtower.databinding.ActivityMainBinding
-
 import com.mrprogrammer.mrtower.Utils.CommonFunctions
 import com.mrprogrammer.mrtower.Utils.Const
 import com.mrprogrammer.mrtower.Utils.LocalSharedPreferences
+import com.mrprogrammer.mrtower.databinding.ActivityMainBinding
 import com.mrprogrammer.shop.MrToast.MrToast
 import java.util.*
 
@@ -36,6 +35,18 @@ class MainActivity : AppCompatActivity() {
     private val RC_SIGN_IN = 123
     private var mAuth: FirebaseAuth? = null
     private var reference: DatabaseReference? = null
+
+
+    override fun onStart() {
+        super.onStart()
+        val user = FirebaseAuth.getInstance().currentUser
+        if (user != null) {
+            val i = Intent(this, BaseActivity::class.java)
+            startActivity(i)
+            finish()
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         root = ActivityMainBinding.inflate(LayoutInflater.from(this))
@@ -51,6 +62,7 @@ class MainActivity : AppCompatActivity() {
             loginWithGoogle()
         }
     }
+
     private fun createRequest() {
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
@@ -87,9 +99,11 @@ class MainActivity : AppCompatActivity() {
                 reference = FirebaseDatabase.getInstance().getReference("Userdata")
                 try {
                     if (clearedEmailString != null) {
-                        reference?.child(clearedEmailString)?.child("Username")?.setValue(user.displayName)
+                        reference?.child(clearedEmailString)?.child("Username")
+                            ?.setValue(user.displayName)
                         reference?.child(clearedEmailString)?.child("Email")?.setValue(user.email)
-                        reference?.child(clearedEmailString)?.child("Imageurl")?.setValue(Objects.requireNonNull(user.photoUrl).toString())
+                        reference?.child(clearedEmailString)?.child("Imageurl")
+                            ?.setValue(Objects.requireNonNull(user.photoUrl).toString())
                         try {
                             FirebaseMessaging.getInstance().subscribeToTopic("All")
                         } catch (e: Exception) {
@@ -102,16 +116,21 @@ class MainActivity : AppCompatActivity() {
                 }
             } else {
                 root.progressCircular.visibility = View.INVISIBLE
-                MrToast.error(this,task.exception.toString())
+                MrToast.error(this, task.exception.toString())
             }
         }
     }
 
     private fun saveUserLocallyAndChangeActivity(user: FirebaseUser) {
-        LocalSharedPreferences.saveUserLocally(this, user.displayName, user.email, user.photoUrl.toString())
+        LocalSharedPreferences.saveUserLocally(
+            this,
+            user.displayName,
+            user.email,
+            user.photoUrl.toString()
+        )
         root.progressCircular.visibility = View.INVISIBLE
         startActivity(Intent(this, BaseActivity::class.java))
-        CommonFunctions.activityAnimation(this,true)
+        CommonFunctions.activityAnimation(this, true)
         finish()
     }
 

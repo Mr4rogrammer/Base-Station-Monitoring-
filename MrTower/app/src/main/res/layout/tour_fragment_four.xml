@@ -2,15 +2,28 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="15dp"
     android:background="@color/trans">
 
 
-
-    <TextView
-        android:layout_marginTop="7dp"
-        android:textColor="@color/black"
-        android:textAlignment="center"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:src="@drawable/fourth" />
+
+        <TextView
+            android:text="A tower is like a beacon of hope, connecting us to \nthe rest of the world. A signal app is the tool that helps us\n make that connection."
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:textAlignment="center"
+            android:textColor="@color/black" />
+    </LinearLayout>
 
 </RelativeLayout>
