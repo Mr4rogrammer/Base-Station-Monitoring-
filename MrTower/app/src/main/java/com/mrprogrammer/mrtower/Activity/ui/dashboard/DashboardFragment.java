@@ -1,9 +1,11 @@
 package com.mrprogrammer.mrtower.Activity.ui.dashboard;
 
 import android.Manifest;
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -13,6 +15,8 @@ import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -43,8 +47,6 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.mrprogrammer.mrtower.Interface.CompleteHandler;
 import com.mrprogrammer.mrtower.R;
 import com.mrprogrammer.mrtower.Realm.SaveLocation;
@@ -72,6 +74,8 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback, G
     private List<Polyline> polylines = null;
     protected LatLng start = null;
     protected LatLng end = null;
+    private ImageView reload;
+    private TextView kms;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -93,6 +97,17 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback, G
             e.printStackTrace();
         }
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity());
+        reload = view.findViewById(R.id.reload);
+        kms = view.findViewById(R.id.kms);
+        reload.setOnClickListener(view -> {
+            ObjectAnimator rotateAnimator = ObjectAnimator.ofFloat(reload, "rotation", 0f, 360f);
+            rotateAnimator.setDuration(20000);
+            rotateAnimator.start();
+                    getLastLocation();
+                    addLocations();
+                }
+        );
+        enableWorkManager();
         return view;
     }
 
@@ -122,19 +137,20 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback, G
             if (ActivityCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 requestPermissions();
             }
-            mFusedLocationClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
-                @Override
-                public void onComplete(@NonNull Task<Location> task) {
-                    Location location = task.getResult();
-                    if (location == null) {
+            mFusedLocationClient.getLastLocation().addOnCompleteListener(task -> {
+                Location location = task.getResult();
+                if (location == null) {
+                    requestNewLocationData();
+                } else {
+                    try {
                         requestNewLocationData();
-                    } else {
+                    } catch (Exception e) {
                         locationData(location);
                     }
                 }
             });
         } else {
-            Toast.makeText(requireActivity(), "Please turn on" + " your location...", Toast.LENGTH_LONG).show();
+            Toast.makeText(requireActivity(), "Please turn on your location...", Toast.LENGTH_LONG).show();
             Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
             startActivity(intent);
         }
@@ -170,7 +186,7 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback, G
     private void requestNewLocationData() {
         LocationRequest mLocationRequest = new LocationRequest();
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        mLocationRequest.setInterval(5);
+        mLocationRequest.setInterval(1);
         mLocationRequest.setFastestInterval(0);
         mLocationRequest.setNumUpdates(1);
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity());
@@ -192,9 +208,7 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback, G
         googleMapView.clear();
         markers.clear();
         for (int i = 0; i < data.size(); i++) {
-
-            String Message ="Radio :"+ data.get(i).getRadio()+"\nArea Code : "+data.get(i).getArea()+"\nMCC : "+data.get(i).getMcc()+"\nNET : "+data.get(i).getNet();
-
+            String Message = "Radio :" + data.get(i).getRadio() + "\nArea Code : " + data.get(i).getArea() + "\nMCC : " + data.get(i).getMcc() + "\nNET : " + data.get(i).getNet();
             LatLng location = new LatLng(data.get(i).getLat(), data.get(i).getLon());
             MarkerOptions markerOptions = new MarkerOptions()
                     .position(location)
@@ -251,8 +265,24 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback, G
         if (nearestMarker != null) {
             nearestMarker.showInfoWindow();
             LatLng shortestTower = new LatLng(nearestMarker.getPosition().latitude, nearestMarker.getPosition().longitude);
-            LatLng startingPlace = new LatLng(location.getLatitude(), location.getLongitude());
-            Findroutes(startingPlace, shortestTower);
+
+
+            float[] results = new float[1];
+            Location.distanceBetween(startingPoint.latitude, startingPoint.longitude, shortestTower.latitude, shortestTower.longitude, results);
+
+            float distanceInMeters = results[0];
+            float distanceInKm = distanceInMeters / 1000;
+
+
+            kms.setText(distanceInKm + " Total distance");
+
+            PolylineOptions polylineOptions = new PolylineOptions()
+                    .add(startingPoint)
+                    .add(shortestTower);
+            polylineOptions.color(Color.RED);
+            polylineOptions.width(5);
+            googleMapView.addPolyline(polylineOptions);
+            //Findroutes(startingPlace, shortestTower);
         }
     }
 
@@ -273,6 +303,7 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback, G
     }
 
     public void Findroutes(LatLng Start, LatLng End) {
+
         if (Start == null || End == null) {
             Toast.makeText(requireActivity(), "Unable to get location", Toast.LENGTH_LONG).show();
         } else {
@@ -335,12 +366,15 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback, G
 
     @Override
     public void onRoutingCancelled() {
-        Findroutes(start, end);
+        //Findroutes(start, end);
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Findroutes(start, end);
+        //Findroutes(start, end);
+    }
+
+    public void enableWorkManager() {
     }
 
 }
